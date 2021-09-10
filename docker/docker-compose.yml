@@ -66,4 +66,4 @@ services:
       - PYTHONPATH=$PYTHONPATH:/usr/local/app/
     command: >
       bash -c "pip install -r /usr/local/app/requirements.txt &&
-      python /usr/local/app/producer/producer.py --topic Crytocurrency --bootstrap-servers broker:29092 --schema-registry http://schema-registry:8081 --log-file /usr/local/app.log"
+      python /usr/local/app/producer/producer.py --topic Cryptocurrency --bootstrap-servers broker:29092 --schema-registry http://schema-registry:8081 --log-file /usr/local/app.log"
