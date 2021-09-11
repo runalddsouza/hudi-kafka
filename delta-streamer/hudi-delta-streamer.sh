@@ -13,7 +13,7 @@ spark-submit --jars "$JAR_PATH" \
 --conf spark.serializer=org.apache.spark.serializer.KryoSerializer \
 --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer \
 "$JAR_FILE" \
-  --table-type COPY_ON_WRITE \
+  --table-type MERGE_ON_READ \
   --source-ordering-field "time" \
   --props "$PROPERTIES_FILE" \
   --source-class org.apache.hudi.utilities.sources.AvroKafkaSource \
