@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 SPARK_MASTER=$1
-PROPERTIES_FILE=$2
-OUTPUT_PATH=$3
-JAR_PATH="/usr/bin/hudi-utilities-bundle"
-JAR_FILE="$JAR_PATH/hudi-utilities-bundle_2.12-0.8.0.jar"
-CHECKPOINT_PATH="/tmp/checkpoint"
+BROKER_SERVER=$2
+SCHEMA_REGISTRY_URL=$3
+PROPERTIES_FILE=$4
+OUTPUT_PATH=$5
+JAR_PATH="/usr/lib/hudi/hudi-utilities-bundle"
+JAR_FILE=$(find $JAR_PATH -name "hudi-utilities-bundle*.jar" | grep "hudi-utilities-bundle")
 
 spark-submit --jars "$JAR_PATH" \
 --master "$SPARK_MASTER" \
@@ -13,13 +14,14 @@ spark-submit --jars "$JAR_PATH" \
 --class org.apache.hudi.utilities.deltastreamer.HoodieDeltaStreamer \
 "$JAR_FILE" \
   --table-type COPY_ON_WRITE \
-  --source-ordering-field time \
+  --source-ordering-field "time" \
   --props "$PROPERTIES_FILE" \
   --source-class org.apache.hudi.utilities.sources.AvroKafkaSource \
   --target-base-path "$OUTPUT_PATH" \
   --target-table Cryptocurrency \
-  --checkpoint "$CHECKPOINT_PATH" \
   --schemaprovider-class org.apache.hudi.utilities.schema.SchemaRegistryProvider \
-  --hoodie-conf bootstrap.servers=broker:29092 \
-  --hoodie-conf schema.registry.url=http://schema-registry:8081 \
-  --hoodie-conf hoodie.deltastreamer.schemaprovider.registry.url=http://schema-registry:8081/subjects/Cryptocurrency-value/versions/latest
+  --hoodie-conf bootstrap.servers="$BROKER_SERVER" \
+  --hoodie-conf schema.registry.url="$SCHEMA_REGISTRY_URL" \
+  --hoodie-conf hoodie.deltastreamer.schemaprovider.registry.url="$SCHEMA_REGISTRY_URL"/subjects/Cryptocurrency-value/versions/latest \
+  --continuous
+# --checkpoint 0
