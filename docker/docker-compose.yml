@@ -35,6 +35,9 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: "true"
       CONFLUENT_SUPPORT_CUSTOMER_ID: "anonymous"
+    command: >
+      /bin/sh -c "((sleep 15 && kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic Cryptocurrency)&) &&
+      /etc/confluent/docker/run"
 
   kafka-tools:
     image: confluentinc/cp-kafka:5.4.0
@@ -57,6 +60,7 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
   producer:
     image: python:3.9-slim-buster
+    container_name: producer
     depends_on:
       - schema-registry
       - broker
@@ -67,3 +71,15 @@ services:
     command: >
       bash -c "pip install -r /usr/local/app/requirements.txt &&
       python /usr/local/app/producer/producer.py --topic Cryptocurrency --bootstrap-servers broker:29092 --schema-registry http://schema-registry:8081 --log-file /usr/local/app.log"
+  delta-streamer:
+    build: .
+    container_name: delta-streamer
+    depends_on:
+      - schema-registry
+      - broker
+      - producer
+    volumes:
+      - ../delta-streamer:/usr/local/app
+    command: >
+      bash -c "sleep 60 &&
+      /usr/local/app/hudi-delta-streamer.sh local[*] broker:29092 http://schema-registry:8081 /usr/local/app/kafka-source.properties /usr/local/output/Cryptocurrency"
