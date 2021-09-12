@@ -12,9 +12,6 @@ RUN export JAVA_HOME
 # PySpark
 RUN pip install pyspark==3.0.0
 
-#COPY ../delta-streamer/* /usr/local/app/
-#RUN chmod +x /usr/local/app/hudi-delta-streamer.sh
-
 # Download Hudi bundle utilities
 RUN mkdir -p /usr/lib/hudi/hudi-utilities-bundle
 RUN apt-get update && \
