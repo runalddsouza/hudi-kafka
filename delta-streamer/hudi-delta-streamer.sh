@@ -23,5 +23,7 @@ spark-submit --jars "$JAR_PATH" \
   --hoodie-conf bootstrap.servers="$BROKER_SERVER" \
   --hoodie-conf schema.registry.url="$SCHEMA_REGISTRY_URL" \
   --hoodie-conf hoodie.deltastreamer.schemaprovider.registry.url="$SCHEMA_REGISTRY_URL"/subjects/Cryptocurrency-value/versions/latest \
+  --hoodie-conf hoodie.insert.shuffle.parallelism=12 \
+  --hoodie-conf hoodie.upsert.shuffle.parallelism=12 \
   --continuous
 # --checkpoint 0
