@@ -1,17 +1,16 @@
 import json
 import ssl
 import time
+from pathlib import Path
 
 import avro
 import pandas as pd
 import websocket
-
-from parse_args import parse_args
-from schema import schema
-from pathlib import Path
-from app_logger import logger
-
 from confluent_kafka.avro import AvroProducer
+
+import logger
+import schema
+from parse_args import parse_args
 
 
 class CryptoCurrencyProducer:
