@@ -10,9 +10,10 @@ This project has two components:
 
 ### Consumer
 Refer [Documentation](https://hudi.apache.org/docs/writing_data/#deltastreamer) for configuration.
+- Install [Spark](https://spark.apache.org/downloads.html)
 - Update Hudi config and kafka topic settings in `kafka-source.properties`
 - Download [Hudi utilities bundle](https://repo1.maven.org/maven2/org/apache/hudi/) and set path in `hudi-delta-streamer.sh`
-- Start: `hudi-delta-streamer.sh <spark-master> <broker-server> <schema-registry-url> kafka-source.properties <output-path>`
+- Start: `delta-streamer/hudi-delta-streamer.sh <spark-master> <broker-server> <schema-registry-url> delta-streamer/kafka-source.properties <output-path>`
 
 ### Docker Setup
 - Kafka
