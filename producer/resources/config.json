@@ -1,0 +1,24 @@
+{
+  "websocket": {
+    "host": "wss://ws-feed.pro.coinbase.com",
+    "subscription": {
+      "type": "subscribe",
+      "product_ids": [
+        "BTC-USD",
+        "BTC-EUR",
+        "ETH-USD",
+        "ETH-EUR",
+        "LINK-USD",
+        "LINK-EUR"
+      ],
+      "channels": [
+        "ticker"
+      ]
+    },
+    "logs": "websocket.log",
+    "retry": {
+      "interval": 5,
+      "limit": 10
+    }
+  }
+}
