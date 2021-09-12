@@ -39,13 +39,6 @@ services:
       /bin/sh -c "((sleep 15 && kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic Cryptocurrency)&) &&
       /etc/confluent/docker/run"
 
-  kafka-tools:
-    image: confluentinc/cp-kafka:5.4.0
-    hostname: kafka-tools
-    container_name: kafka-tools
-    command: [ "tail", "-f", "/dev/null" ]
-    network_mode: "host"
-
   schema-registry:
     image: confluentinc/cp-schema-registry:5.4.0
     hostname: schema-registry
@@ -58,6 +51,7 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
+
   producer:
     image: python:3.9-slim-buster
     container_name: producer
@@ -71,6 +65,7 @@ services:
     command: >
       bash -c "pip install -r /usr/local/app/requirements.txt &&
       python /usr/local/app/producer/producer.py --topic Cryptocurrency --bootstrap-servers broker:29092 --schema-registry http://schema-registry:8081 --log-file /usr/local/app.log"
+
   delta-streamer:
     build: .
     container_name: delta-streamer
